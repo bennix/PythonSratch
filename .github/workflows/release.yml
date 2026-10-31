@@ -41,14 +41,20 @@ jobs:
             done
           fi
       - run: npm ci
-      - run: npx electron-builder --${{ matrix.platform }} --publish never
+      - name: Windows installer
+        if: matrix.platform == 'win'
+        run: npx electron-builder --win --publish never
+      - name: Debian package
+        if: matrix.platform == 'linux'
+        run: npx electron-builder --linux deb --publish never
+      - name: RPM package
+        if: matrix.platform == 'linux'
+        continue-on-error: true
+        run: DEBUG=electron-builder npx electron-builder --linux rpm --publish never
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.platform }}
-          path: |
-            dist/*.deb
-            dist/*.rpm
-            dist/*.exe
+          path: dist/PythonScratch-*
           if-no-files-found: error
   release:
     needs: build
