@@ -21,9 +21,8 @@
     "appId": "edu.fudan.pythonscratch",
     "productName": "PythonScratch",
     "artifactName": "PythonScratch-${version}-${os}-${arch}.${ext}",
-    "directories": {
-      "output": "dist"
-    },
+    "directories": { "output": "dist" },
+    "afterSign": "build/after-sign.js",
     "files": [
       "main.js",
       "preload.js",
@@ -57,7 +56,7 @@
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
       "notarize": true,
-      "signIgnore": ["/zoneinfo/", "/tzdata/"]
+      "signIgnore": ["\\.venv/lib/"]
     },
     "win": {
       "icon": "build/icon.ico",
