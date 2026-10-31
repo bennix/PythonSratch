@@ -34,6 +34,11 @@ jobs:
             .venv/bin/python -m pip install pandas matplotlib
             sudo apt-get update
             sudo apt-get install -y rpm
+            find .venv -type l | while read -r link; do
+              target=$(readlink -f "$link") || continue
+              rm "$link"
+              cp -a "$target" "$link"
+            done
           fi
       - run: npm ci
       - run: npx electron-builder --${{ matrix.platform }} --publish never
