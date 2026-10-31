@@ -132,7 +132,7 @@
     };
     dataRef.innerHTML = topics[task.topic] || "";
     const sample = window.EXAMPLES[task.id];
-    window.renderCode(exampleEl, sample ? sample.text : "这一题还没有范例");
+    window.renderCode(exampleEl, sample ? sample.text : (task.exampleText || "这一题还没有范例"));
     const mentioned = ((sample && sample.text) || "") + " " + (task.goal || "");
     showDataFiles(mentioned);
     stdinEl.value = (task.tests[0] && task.tests[0].stdin) || "";
@@ -393,4 +393,47 @@
 
   showTask(current);
   snapshots[current.id] = null;
+  window.labShowTask = showTask;
+  window.labAddAiTask = function (spec) {
+    const task = {
+      id: "ai-" + Date.now(),
+      week: (current && current.week) || 1,
+      title: spec.title || "AI 题目",
+      brief: spec.brief || "这道题由 AI 按当前知识点生成，数字和课堂题目不同。",
+      goal: spec.goal || "",
+      hint: spec.hint || "",
+      tests: [{ stdin: spec.stdin || "" }],
+      accept(code, runs) {
+        const out = runs.map((r) => r.stdout || "").join("\n");
+        const outs = spec.stdoutIncludes || [];
+        const codes = spec.codeIncludes || [];
+        const outOk = outs.every((s) => out.includes(String(s)));
+        const codeOk = codes.every((s) => {
+          try { return new RegExp(s).test(code); } catch (_) { return code.includes(String(s)); }
+        });
+        return runs.every((r) => r.ok) && outOk && codeOk;
+      },
+    };
+    const weekBox = [...document.querySelectorAll(".week")].find((box) => {
+      const head = box.querySelector(".week-btn");
+      return head && head.textContent === "第 " + task.week + " 周";
+    });
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "task-btn";
+    btn.dataset.id = task.id;
+    btn.textContent = task.title;
+    btn.addEventListener("click", () => showTask(task));
+    if (weekBox) weekBox.appendChild(btn);
+    else listEl.appendChild(btn);
+    showTask(task);
+    return task;
+  };
+  window.labPinCanvas = function () {
+    if (!current) return;
+    snapshots[current.id] = Blockly.Xml.workspaceToDom(workspace);
+    refreshCode();
+    current.exampleText = codeNow();
+    window.renderCode(exampleEl, current.exampleText || "范例已在画布上");
+  };
 })();

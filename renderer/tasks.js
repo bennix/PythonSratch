@@ -66,32 +66,6 @@
       },
     },
     {
-      errors: true,
-      id: "w4-finally",
-      week: 4,
-      title: "finally 总会执行",
-      brief: "finally 里的代码无论 try 成功还是 except 接住错误，都会执行。适合放关闭文件、打印收尾这类动作。",
-      goal: "try 里执行 int('abc')，except 打印：捕获到错误，finally 打印：finally已执行。两句都要出现。",
-      hint: "同一块 try 积木有三个槽：尝试、出错时、无论成败。范例的两句打印文字不同。",
-      tests: [{ stdin: "" }],
-      accept(code, runs) {
-        return runs[0].ok && /finally:/.test(code) && /捕获到错误/.test(runs[0].stdout) && /finally已执行/.test(runs[0].stdout);
-      },
-    },
-    {
-      errors: true,
-      id: "w4-assert",
-      week: 4,
-      title: "断言 assert",
-      brief: "assert 用来声明一个必须成立的条件。条件为假时立刻抛出 AssertionError，并带上你写的说明。",
-      goal: "令 n = 80，断言 n >= 0，说明写「分数不能为负」。断言通过后打印：断言通过。",
-      hint: "比较积木放在 assert 左边，说明用字符串。范例用的是另一个数字和另一句输出。",
-      tests: [{ stdin: "" }],
-      accept(code, runs) {
-        return runs[0].ok && /assert /.test(code) && /断言通过/.test(runs[0].stdout);
-      },
-    },
-    {
       topic: "loop",
       id: "w5-sum",
       week: 5,
@@ -374,7 +348,7 @@
       id: "w8-group",
       week: 8,
       title: "捕获组",
-      brief: "圆括号是捕获组。从左边数，第 1 对括号是 group(1)，第 2 对是 group(2)。group(0) 仍是整段匹配。",
+      brief: "圆括号是捕获。从左边数第几对括号：第 1 对是 group(1)，第 2 对是 group(2)。group(0) 是整段匹配。",
       goal: "用 re.search 和两个捕获组，从「mail ada@fudan.edu」取出用户名 ada 和域名 fudan.edu，各打印一行。",
       hint: "模式写成 (\\w+)@([\\w.]+)。结果分别接 .group(1) 和 .group(2)。范例拆的是另一段文字。",
       tests: [{ stdin: "" }],

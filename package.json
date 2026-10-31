@@ -1,6 +1,6 @@
 {
   "name": "python-scratch",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "Scratch-style Python learning lab for AIB110002",
   "author": "ZHIPING XU <zpxu@fudan.edu.cn>",
   "main": "main.js",
@@ -11,7 +11,9 @@
     "dist:win": "electron-builder --win nsis"
   },
   "dependencies": {
-    "blockly": "10.4.3"
+    "blockly": "10.4.3",
+    "katex": "^0.19.1",
+    "marked": "^18.1.2"
   },
   "devDependencies": {
     "electron": "33.4.11",
@@ -21,7 +23,10 @@
     "appId": "edu.fudan.pythonscratch",
     "productName": "PythonScratch",
     "artifactName": "PythonScratch-${version}-${os}-${arch}.${ext}",
-    "directories": { "output": "dist" },
+    "directories": {
+      "output": "dist"
+    },
+    "afterPack": "build/after-pack.js",
     "afterSign": "build/after-sign.js",
     "files": [
       "main.js",
@@ -55,8 +60,10 @@
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
-      "notarize": true,
-      "signIgnore": ["\\.venv/lib/"]
+      "notarize": false,
+      "signIgnore": [
+        "\\.venv/lib/"
+      ]
     },
     "win": {
       "icon": "build/icon.ico",

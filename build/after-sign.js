@@ -14,7 +14,7 @@ exports.default = async function (context) {
       const stat = fs.lstatSync(full);
       if (stat.isSymbolicLink()) continue;
       if (stat.isDirectory()) walk(full);
-      else if (name.endsWith(".so") || name.startsWith("python")) files.push(full);
+      else if (name.endsWith(".so") || name.endsWith(".dylib") || name.startsWith("python")) files.push(full);
     }
   }
   walk(root);

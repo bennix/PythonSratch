@@ -1,6 +1,42 @@
 (function () {
   const P = Blockly.Python;
 
+  const origInit = P.init;
+  P.init = function (workspace) {
+    origInit.call(this, workspace);
+    delete this.definitions_.variables;
+  };
+
+  function slotFilled(block, name) {
+    const input = block.getInput(name);
+    return !!(input && input.connection && input.connection.targetConnection);
+  }
+
+  P["variables_set"] = function (block) {
+    if (!slotFilled(block, "VALUE")) return "";
+    const name = P.getVariableName(block.getFieldValue("VAR"));
+    const value = P.valueToCode(block, "VALUE", P.ORDER_NONE);
+    if (!value) return "";
+    return name + " = " + value + "\n";
+  };
+
+  Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "传入";
+  Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = "定义函数";
+  Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = "定义函数";
+  Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "参数";
+  Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "参数名：";
+  ["procedures_defreturn", "procedures_defnoreturn"].forEach((type) => {
+    const proto = Blockly.Blocks[type];
+    if (!proto || !proto.updateParams_) return;
+    const orig = proto.updateParams_;
+    proto.updateParams_ = function () {
+      orig.call(this);
+      if (!this.getField("PARAMS")) return;
+      const args = this.arguments_ || [];
+      this.setFieldValue(args.length ? "(参数 " + args.join(", ") + ")" : "()", "PARAMS");
+    };
+  });
+
   Blockly.Blocks["py_input"] = {
     init() {
       this.appendDummyInput()
@@ -211,7 +247,9 @@
   };
   P["py_call1"] = function (block) {
     const fn = block.getFieldValue("FN");
-    const a = P.valueToCode(block, "A", P.ORDER_NONE) || "None";
+    if (!slotFilled(block, "A")) return ["", P.ORDER_ATOMIC];
+    const a = P.valueToCode(block, "A", P.ORDER_NONE);
+    if (!a) return ["", P.ORDER_ATOMIC];
     if (fn.startsWith("math.")) P.definitions_["import_math"] = "import math";
     return [fn + "(" + a + ")", P.ORDER_FUNCTION_CALL];
   };
@@ -235,8 +273,10 @@
   };
   P["py_call2"] = function (block) {
     const fn = block.getFieldValue("FN");
-    const a = P.valueToCode(block, "A", P.ORDER_NONE) || "None";
-    const b = P.valueToCode(block, "B", P.ORDER_NONE) || "None";
+    if (!slotFilled(block, "A") || !slotFilled(block, "B")) return ["", P.ORDER_ATOMIC];
+    const a = P.valueToCode(block, "A", P.ORDER_NONE);
+    const b = P.valueToCode(block, "B", P.ORDER_NONE);
+    if (!a || !b) return ["", P.ORDER_ATOMIC];
     if (fn.startsWith("random.")) P.definitions_["import_random"] = "import random";
     return [fn + "(" + a + ", " + b + ")", P.ORDER_FUNCTION_CALL];
   };

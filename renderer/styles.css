@@ -118,3 +118,63 @@ table.meta td:nth-child(odd) { color: var(--fn); font-family: ui-monospace, Menl
 #plot { width: 100%; margin-top: 8px; background: white; border-radius: 8px; }
 #verdict.ok { color: var(--ok); }
 #verdict.bad { color: var(--bad); }
+.drawer, .modal {
+  position: fixed; z-index: 30; background: var(--panel); color: var(--text);
+  border: 1px solid var(--line); box-shadow: 0 12px 40px rgba(0,0,0,.28);
+}
+.drawer {
+  top: auto; right: 24px; bottom: 24px; left: auto;
+  width: 380px; height: 460px; min-width: 280px; min-height: 240px;
+  max-width: calc(100vw - 24px); max-height: calc(100vh - 24px);
+  border-radius: 12px; display: flex; flex-direction: column; padding: 12px; gap: 8px;
+  overflow: hidden;
+}
+.drawer[hidden], .modal[hidden] { display: none; }
+.drawer-head, .ai-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+#ai-panel .drawer-head { justify-content: space-between; cursor: grab; user-select: none; }
+#ai-panel .drawer-head:active { cursor: grabbing; }
+#ai-resize {
+  position: absolute; right: 0; bottom: 0; width: 18px; height: 18px; cursor: nwse-resize; z-index: 2;
+  background:
+    linear-gradient(135deg, transparent 50%, var(--muted) 50%, var(--muted) 62%, transparent 62%),
+    linear-gradient(135deg, transparent 68%, var(--muted) 68%, var(--muted) 80%, transparent 80%);
+}
+.ai-log { flex: 1; overflow: auto; display: flex; flex-direction: column; gap: 8px; }
+.ai-msg { border-radius: 8px; padding: 8px 10px; line-height: 1.5; font-size: 13px; }
+.ai-msg.user { background: var(--btn); white-space: pre-wrap; }
+.ai-msg.assistant, .ai-msg.note { background: var(--code-bg); }
+.ai-msg.note { color: var(--muted); }
+.ai-msg.assistant p { margin: 0.3em 0; }
+.ai-msg.assistant pre { overflow: auto; position: relative; padding-top: 34px; }
+.ai-bar { display: flex; gap: 6px; margin-top: 8px; }
+.ai-bar button, .ai-code-tools button { padding: 3px 8px; font-size: 12px; }
+.ai-code-tools { position: absolute; top: 6px; right: 6px; display: flex; gap: 6px; }
+.ai-msg pre code[contenteditable="true"] {
+  display: block; outline: 1px dashed var(--line); border-radius: 6px; padding: 6px; min-height: 3em;
+}
+.ai-drop {
+  border: 1px dashed var(--line); border-radius: 8px; padding: 8px; text-align: center;
+  color: var(--muted); font-size: 12px;
+}
+.ai-drop.over { border-color: var(--accent); color: var(--text); }
+.ai-thumbs { display: flex; gap: 8px; min-height: 0; }
+.ai-thumb {
+  position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden;
+  background: var(--code-bg); border: 1px solid var(--line); font-size: 10px;
+  display: grid; place-items: center; text-align: center; padding: 4px;
+}
+.ai-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.ai-thumb-x {
+  position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; padding: 0;
+  border-radius: 50%; line-height: 16px; background: #1c2430; color: white;
+}
+.file-label {
+  border: 1px solid var(--line); background: var(--btn); border-radius: 8px; padding: 8px 14px; cursor: pointer;
+}
+.modal { inset: 0; display: grid; place-items: center; background: rgba(8, 12, 18, .45); }
+.modal-card {
+  width: min(480px, calc(100vw - 32px)); background: var(--panel); border-radius: 12px; padding: 16px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.modal-card label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.modal-card input, .modal-card select { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--code-bg); color: var(--text); }

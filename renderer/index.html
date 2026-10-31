@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Python 积木学习台</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="../node_modules/katex/dist/katex.min.css" />
   <script src="../node_modules/blockly/blockly_compressed.js"></script>
   <script src="../node_modules/blockly/blocks_compressed.js"></script>
   <script src="../node_modules/blockly/python_compressed.js"></script>
@@ -19,6 +20,8 @@
       </div>
     </div>
     <div class="header-actions">
+      <button id="btn-ai" type="button">AI</button>
+      <button id="btn-settings" type="button">设置</button>
       <button id="btn-theme" type="button">明亮</button>
       <button id="btn-reset" type="button">重置本题</button>
       <button id="btn-run" type="button" class="primary">运行</button>
@@ -74,16 +77,61 @@
       </section>
       <section>
         <h3>运行结果</h3>
+        <div class="row">
+          <span></span>
+          <button id="btn-copy-out" type="button">复制输出</button>
+        </div>
         <pre id="output" class="out">尚未运行</pre>
         <img id="plot" alt="柱状图" hidden />
         <p id="verdict"></p>
       </section>
     </aside>
   </div>
+  <div id="ai-panel" class="drawer" hidden>
+    <div class="drawer-head" title="按住这里拖动">
+      <strong>AI 助教</strong>
+      <button id="ai-close" type="button">关闭</button>
+    </div>
+    <div id="ai-log" class="ai-log"></div>
+    <div id="ai-drop" class="ai-drop">把附件拖到这里，最多 5 个</div>
+    <div id="ai-thumbs" class="ai-thumbs"></div>
+    <textarea id="ai-input" rows="3" placeholder="问当前知识点，或让 AI 出积木和题目"></textarea>
+    <div class="ai-actions">
+      <button id="ai-blocks" type="button">生成积木</button>
+      <button id="ai-task" type="button">生成任务</button>
+      <button id="ai-stop" type="button">停止</button>
+      <label class="file-label">附件<input id="ai-file" type="file" multiple hidden /></label>
+      <button id="ai-send" type="button" class="primary">发送</button>
+    </div>
+    <div id="ai-resize" title="拖动改变大小"></div>
+  </div>
+  <div id="settings" class="modal" hidden>
+    <div class="modal-card">
+      <div class="drawer-head">
+        <strong>AI 设置</strong>
+        <button id="set-close" type="button">关闭</button>
+      </div>
+      <label>Base URL<input id="set-base" type="text" /></label>
+      <label>模型
+        <select id="set-model"></select>
+      </label>
+      <div class="row">
+        <input id="set-new-model" type="text" placeholder="新增模型名称" />
+        <button id="set-add-model" type="button">增加</button>
+      </div>
+      <label>API Key<input id="set-key" type="password" autocomplete="off" /></label>
+      <p id="set-invite" class="hint">还没有密钥时，可以用邀请链接领取：<a href="https://zenmux.ai/invite/GBQMC5" target="_blank" rel="noreferrer">https://zenmux.ai/invite/GBQMC5</a></p>
+      <p class="hint">密钥只保存在这台电脑上，界面不回显原文。</p>
+      <button id="set-save" type="button" class="primary">保存</button>
+    </div>
+  </div>
+  <script src="../node_modules/marked/lib/marked.umd.js"></script>
+  <script src="../node_modules/katex/dist/katex.min.js"></script>
   <script src="highlight.js"></script>
   <script src="blocks.js"></script>
   <script src="tasks.js"></script>
   <script src="examples.js"></script>
   <script src="app.js"></script>
+  <script src="ai.js"></script>
 </body>
 </html>
