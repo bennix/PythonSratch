@@ -7,8 +7,8 @@
   "scripts": {
     "start": "electron .",
     "dist:mac": "electron-builder --mac dmg --arm64",
-    "dist:linux": "electron-builder --linux deb rpm",
-    "dist:win": "electron-builder --win nsis"
+    "dist:linux": "electron-builder --linux deb rpm --x64",
+    "dist:win": "electron-builder --win nsis --x64"
   },
   "dependencies": {
     "blockly": "10.4.3",
