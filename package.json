@@ -1,6 +1,6 @@
 {
   "name": "python-scratch",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Scratch-style Python learning lab for AIB110002",
   "author": "ZHIPING XU <zpxu@fudan.edu.cn>",
   "main": "main.js",

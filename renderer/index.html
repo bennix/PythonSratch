@@ -95,7 +95,10 @@
     <div id="ai-log" class="ai-log"></div>
     <div id="ai-drop" class="ai-drop">把附件拖到这里，最多 5 个</div>
     <div id="ai-thumbs" class="ai-thumbs"></div>
-    <textarea id="ai-input" rows="3" placeholder="问当前知识点，或让 AI 出积木和题目"></textarea>
+    <div id="ai-compose">
+      <div id="ai-mentions" class="ai-mentions" hidden></div>
+      <textarea id="ai-input" rows="3" placeholder="问当前知识点。输入 @ 引用 data 里的文件"></textarea>
+    </div>
     <div class="ai-actions">
       <button id="ai-blocks" type="button">生成积木</button>
       <button id="ai-task" type="button">生成任务</button>

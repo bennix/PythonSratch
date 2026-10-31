@@ -182,11 +182,11 @@
       xml: `<xml><block type="variables_set" x="24" y="24"><field name="VAR">df</field><value name="VALUE"><block type="pd_read"><field name="PATH">data/demo_scores.csv</field></block></value><next><block type="text_print"><value name="TEXT"><block type="pd_group"><field name="BY">class</field><field name="COL">score</field><value name="DF"><block type="variables_get"><field name="VAR">df</field></block></value></block></value></block></next></block></xml>`,
     },
     "w12-plot": {
-      text: "# 知识点：分组平均再画柱状图。范例用演示表\nimport pandas as pd\nimport matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\ndf = pd.read_csv('data/demo_scores.csv')\ngrouped = df.groupby('class')['score'].mean()\ngrouped.plot.bar()\nplt.savefig('plot.png')\nprint('图已保存')",
+      text: "# 知识点：分组平均再画柱状图。范例用演示表\nimport pandas as pd\nimport matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\ndf = pd.read_csv('data/demo_scores.csv')\ngrouped = df.groupby('class')['score'].mean()\ngrouped.plot.bar()\nplt.tight_layout()\nplt.savefig('plot.png')\nprint('图已保存')",
       xml: `<xml><block type="variables_set" x="24" y="24"><field name="VAR">df</field><value name="VALUE"><block type="pd_read"><field name="PATH">data/demo_scores.csv</field></block></value><next><block type="variables_set"><field name="VAR">grouped</field><value name="VALUE"><block type="pd_group"><field name="BY">class</field><field name="COL">score</field><value name="DF"><block type="variables_get"><field name="VAR">df</field></block></value></block></value><next><block type="pd_plot"><value name="S"><block type="variables_get"><field name="VAR">grouped</field></block></value></block></next></block></next></block></xml>`,
     },
     "w12-line": {
-      text: "# 知识点：一列数据画折线。范例是 demo_weeks.csv，分数是 40、55、50\nimport pandas as pd\nimport matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\ndf = pd.read_csv('data/demo_weeks.csv')\ndf['score'].plot.line()\nplt.savefig('plot.png')\nprint('图已保存')",
+      text: "# 知识点：一列数据画折线。范例是 demo_weeks.csv，分数是 40、55、50\nimport pandas as pd\nimport matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\ndf = pd.read_csv('data/demo_weeks.csv')\ndf['score'].plot.line()\nplt.tight_layout()\nplt.savefig('plot.png')\nprint('图已保存')",
       xml: `<xml><block type="variables_set" x="24" y="24"><field name="VAR">df</field><value name="VALUE"><block type="pd_read"><field name="PATH">data/demo_weeks.csv</field></block></value><next><block type="pd_line"><value name="S"><block type="pd_col"><field name="COL">score</field><value name="DF"><block type="variables_get"><field name="VAR">df</field></block></value></block></value></block></next></block></xml>`,
     },
     "w15-project": {

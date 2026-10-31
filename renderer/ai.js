@@ -2,6 +2,7 @@
   const GUIDE = `你是 Python 积木学习台的助教。学生用 Blockly 积木学 Python。你只能使用学习台里已经有的积木类型，不要发明新的 block type。
 积木类型：text_print, text, py_comment, py_input, variables_set, variables_get, math_number, py_literal(KIND=int|str|bool, VAL), math_arithmetic(OP=ADD|MINUS|MULTIPLY|DIVIDE|POWER), py_call1(FN), py_call2(FN), logic_compare, logic_operation, logic_boolean, logic_negate, controls_if, controls_whileUntil, controls_for, controls_forEach, controls_flow_statements(FLOW=BREAK|CONTINUE), py_try, py_assert, py_list_make, py_append, py_index, py_slice, py_len, py_comp, py_tuple, py_dict_make, py_dict, py_set_make, py_set_add, py_in, py_setitem, py_values, py_items, py_def(KIND=none|pos|default|varargs|kwargs, NAME, ARGS), py_lambda, py_sorted, py_callfn, py_callstmt, py_callkw, py_return, py_import, re_pattern(PAT 不要带引号，程序会加 r), py_re_match, py_re_search, py_re_findall, py_re_group, py_re_groupn, pd_read, pd_col, pd_mean, pd_filter, pd_group, pd_plot, pd_line, py_file_write, py_file_append, py_file_read, py_json_loads。
 语句用 <next> 串起来，嵌套用 <value> 或 <statement>。每个 value 和 statement 都必须接上子积木，禁止空槽。禁止生成 n = None，禁止 int(None)、float(None)。要读入数字时写成：variables_set 的值是 py_call1(int)，int 里面接 py_input。可能出错的 int 和除法必须放进 py_try 的 TRY 槽，不要放在 try 外面。除数使用已经读入的变量，不要留空。整段放在 <xml> 根里。范例数字、姓名、文件必须和当前题目不同。文件名只能是 data 目录里已有的演示文件。
+学生消息里如果有 @data/文件名，以及紧跟着的文件正文，就按这份正文处理，积木里的路径写成同一个 data/文件名。
 要出题时，另给一个 json 代码块，语言标记为 task，字段：title, goal, hint, stdin, stdoutIncludes（字符串数组，输出里必须出现）, codeIncludes（正则字符串数组）。范例积木不要直接满足这些判定。
 讲解用简体中文，可以写 Markdown 和 LaTeX（行内 $...$，独立 $$...$$）。`;
 
@@ -13,6 +14,10 @@
   const panel = document.getElementById("ai-panel");
   const log = document.getElementById("ai-log");
   const input = document.getElementById("ai-input");
+  const mentions = document.getElementById("ai-mentions");
+  let catalog = null;
+  let mentionAt = -1;
+  let mentionPick = 0;
   const thumbs = document.getElementById("ai-thumbs");
   const settings = document.getElementById("settings");
 
@@ -226,6 +231,84 @@
     window.lab.startAiChat({ model: settingsNow.model, messages });
   }
 
+  async function dataCatalog() {
+    if (catalog) return catalog;
+    const names = await window.lab.listDataFiles();
+    catalog = [];
+    for (const name of names) {
+      const result = await window.lab.readDataFile(name);
+      const text = result.ok ? result.text : "";
+      const lines = text ? text.split(/\r?\n/).length : 0;
+      catalog.push({ name, lines, text });
+    }
+    return catalog;
+  }
+
+  function mentionQuery() {
+    const before = input.value.slice(0, input.selectionStart);
+    const match = before.match(/@([A-Za-z0-9_./-]*)$/);
+    if (!match) return null;
+    return { at: before.length - match[0].length, query: match[1].replace(/^data\//, "").toLowerCase() };
+  }
+
+  function hideMentions() {
+    mentions.hidden = true;
+    mentions.innerHTML = "";
+    mentionAt = -1;
+  }
+
+  function attachDataFile(item) {
+    if (files.length >= 5) return;
+    if (files.some((file) => file.name === "data/" + item.name)) return;
+    files.push({ kind: "text", name: "data/" + item.name, text: item.text });
+    paintThumbs();
+  }
+
+  async function showMentions() {
+    const found = mentionQuery();
+    if (!found) {
+      hideMentions();
+      return;
+    }
+    const rows = (await dataCatalog()).filter((item) => item.name.toLowerCase().includes(found.query));
+    mentions.innerHTML = "";
+    if (!rows.length) {
+      hideMentions();
+      return;
+    }
+    mentionAt = found.at;
+    mentionPick = Math.min(mentionPick, rows.length - 1);
+    rows.forEach((item, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = index === mentionPick ? "on" : "";
+      const name = document.createElement("span");
+      name.textContent = item.name;
+      const lines = document.createElement("span");
+      lines.className = "ai-lines";
+      lines.textContent = item.lines + " 行";
+      button.appendChild(name);
+      button.appendChild(lines);
+      button.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        chooseMention(item);
+      });
+      mentions.appendChild(button);
+    });
+    mentions.hidden = false;
+  }
+
+  function chooseMention(item) {
+    const end = input.selectionStart;
+    const insert = "@data/" + item.name + " ";
+    input.value = input.value.slice(0, mentionAt) + insert + input.value.slice(end);
+    const caret = mentionAt + insert.length;
+    input.focus();
+    input.setSelectionRange(caret, caret);
+    attachDataFile(item);
+    hideMentions();
+  }
+
   function paintThumbs() {
     thumbs.innerHTML = "";
     files.forEach((file, index) => {
@@ -322,7 +405,34 @@
     send("请根据当前学习内容出一道新题，并给出判定标准。task 代码块写 title、goal、hint、stdin、stdoutIncludes、codeIncludes。再给一份不能直接通过判定的范例 XML。");
   });
   document.getElementById("ai-stop").addEventListener("click", () => window.lab.stopAiChat());
+  input.addEventListener("input", () => { showMentions(); });
+  input.addEventListener("click", () => { showMentions(); });
   input.addEventListener("keydown", (event) => {
+    if (!mentions.hidden) {
+      const buttons = [...mentions.querySelectorAll("button")];
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        mentionPick = event.key === "ArrowDown"
+          ? Math.min(buttons.length - 1, mentionPick + 1)
+          : Math.max(0, mentionPick - 1);
+        showMentions();
+        return;
+      }
+      if (event.key === "Enter" || event.key === "Tab") {
+        event.preventDefault();
+        const name = buttons[mentionPick] && buttons[mentionPick].querySelector("span").textContent;
+        dataCatalog().then((rows) => {
+          const item = rows.find((row) => row.name === name);
+          if (item) chooseMention(item);
+        });
+        return;
+      }
+      if (event.key === "Escape") {
+        event.preventDefault();
+        hideMentions();
+        return;
+      }
+    }
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       send("");

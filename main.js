@@ -67,7 +67,9 @@ ipcMain.handle("read-data-file", async (_event, name) => {
 ipcMain.handle("run-python", async (_event, { code, stdin }) => {
   return new Promise((resolve) => {
     const plotPath = plotFile();
+    const savedPlot = path.join(rootDir(), "plot.png");
     try { fs.unlinkSync(plotPath); } catch (_) {}
+    try { fs.unlinkSync(savedPlot); } catch (_) {}
     const child = spawn(pythonPath(), ["-c", code], {
       cwd: rootDir(),
       env: { ...process.env, PYTHONIOENCODING: "utf-8", MPLBACKEND: "Agg" },
@@ -90,11 +92,9 @@ ipcMain.handle("run-python", async (_event, { code, stdin }) => {
     });
     child.on("close", (code) => {
       clearTimeout(killer);
-      let image = "";
-      if (fs.existsSync(plotPath)) {
-        image = fs.readFileSync(plotPath).toString("base64");
-        fs.unlinkSync(plotPath);
-      }
+      const imageFile = fs.existsSync(savedPlot) ? savedPlot : plotPath;
+      const image = fs.existsSync(imageFile) ? fs.readFileSync(imageFile).toString("base64") : "";
+      try { fs.unlinkSync(plotPath); } catch (_) {}
       resolve({ ok: code === 0, stdout, stderr, code, image });
     });
     if (stdin) child.stdin.write(stdin.endsWith("\n") ? stdin : stdin + "\n");

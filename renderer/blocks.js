@@ -198,7 +198,7 @@
 
   Blockly.Blocks["pd_plot"] = {
     init() {
-      this.appendValueInput("S").appendField("柱状图 .plot.bar 并保存");
+      this.appendValueInput("S").appendField("柱状图 .plot.bar 保存并显示");
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(20);
@@ -207,12 +207,12 @@
   P["pd_plot"] = function (block) {
     usePlot();
     const s = P.valueToCode(block, "S", P.ORDER_MEMBER) || "df";
-    return s + ".plot.bar()\nplt.savefig('plot.png')\nprint('图已保存')\n";
+    return s + ".plot.bar()\nplt.tight_layout()\nplt.savefig('plot.png')\nprint('图已保存')\n";
   };
 
   Blockly.Blocks["pd_line"] = {
     init() {
-      this.appendValueInput("S").appendField("折线图 .plot.line 并保存");
+      this.appendValueInput("S").appendField("折线图 .plot.line 保存并显示");
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(20);
@@ -221,7 +221,7 @@
   P["pd_line"] = function (block) {
     usePlot();
     const s = P.valueToCode(block, "S", P.ORDER_MEMBER) || "df";
-    return s + ".plot.line()\nplt.savefig('plot.png')\nprint('图已保存')\n";
+    return s + ".plot.line()\nplt.tight_layout()\nplt.savefig('plot.png')\nprint('图已保存')\n";
   };
 
   Blockly.Blocks["py_call1"] = {
