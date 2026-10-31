@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>Python 积木学习台</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="../node_modules/blockly/blockly_compressed.js"></script>
+  <script src="../node_modules/blockly/blocks_compressed.js"></script>
+  <script src="../node_modules/blockly/python_compressed.js"></script>
+  <script src="../node_modules/blockly/msg/zh-hans.js"></script>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="logo">Py</span>
+      <div>
+        <strong>Python 积木学习台</strong>
+        <small>AIB110002 · 复旦 Python 程序设计 · 拖拽语法积木完成周任务</small>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="btn-theme" type="button">明亮</button>
+      <button id="btn-reset" type="button">重置本题</button>
+      <button id="btn-run" type="button" class="primary">运行</button>
+      <button id="btn-check" type="button" class="accent">检查任务</button>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="tasks">
+      <h2>学习任务</h2>
+      <div id="task-list"></div>
+    </aside>
+    <main>
+      <div id="blockly"></div>
+    </main>
+    <aside class="side">
+      <section>
+        <h2 id="task-title">选择一个任务</h2>
+        <p id="task-brief" class="muted"></p>
+        <p id="task-goal"></p>
+        <p id="task-hint" class="hint"></p>
+      </section>
+      <section>
+        <div class="row">
+          <h3>本知识点范例</h3>
+          <button id="btn-example" type="button">放进画布</button>
+          <button id="btn-demo" type="button">逐步演示</button>
+        </div>
+        <div id="demo-bar">
+          <button id="demo-prev" type="button">上一步</button>
+          <button id="demo-play" type="button">播放</button>
+          <button id="demo-next" type="button">下一步</button>
+          <span id="demo-caption"></span>
+        </div>
+        <p class="hint">范例用的是另一组数字。可以一次放进画布，也可以逐步演示，自己点上一步、下一步。</p>
+        <div id="example" class="codebox"></div>
+      </section>
+      <section>
+        <h3>数据文件</h3>
+        <p class="hint">题目和范例用到的文本都在这里，点文件名查看。程序写出来的文件，运行后再点一次即可看到。</p>
+        <div id="file-picks" class="file-picks"></div>
+        <div id="file-view" class="codebox"></div>
+      </section>
+      <section id="regex-ref"></section>
+      <section id="exc-ref"></section>
+      <section id="data-ref"></section>
+      <section>
+        <h3>测试输入（每行一次 input）</h3>
+        <textarea id="stdin" rows="3" placeholder="没有输入就留空"></textarea>
+      </section>
+      <section>
+        <h3>生成的 Python</h3>
+        <div id="code" class="codebox"></div>
+      </section>
+      <section>
+        <h3>运行结果</h3>
+        <pre id="output" class="out">尚未运行</pre>
+        <img id="plot" alt="柱状图" hidden />
+        <p id="verdict"></p>
+      </section>
+    </aside>
+  </div>
+  <script src="highlight.js"></script>
+  <script src="blocks.js"></script>
+  <script src="tasks.js"></script>
+  <script src="examples.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

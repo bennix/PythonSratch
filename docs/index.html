@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Python 积木学习台</title>
+  <link rel="icon" href="icon.png" />
+  <style>
+    :root { --bg:#0f1419; --card:#17202b; --line:#2c3a4f; --text:#e7eef8; --muted:#93a4bd; --mint:#3dd6c6; --gold:#f5c16c; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:"Segoe UI","PingFang SC","Noto Sans SC",sans-serif; background:var(--bg); color:var(--text); }
+    header, main { width:min(960px, calc(100% - 32px)); margin:0 auto; }
+    header { display:flex; align-items:center; justify-content:space-between; padding:22px 0; }
+    .brand { display:flex; gap:12px; align-items:center; font-weight:700; }
+    .brand img { width:42px; height:42px; border-radius:10px; }
+    a.ghost { color:var(--text); text-decoration:none; border:1px solid var(--line); padding:8px 12px; border-radius:8px; }
+    .hero { padding:28px 0 12px; }
+    h1 { font-size:42px; line-height:1.15; margin:0 0 12px; }
+    .lead { color:var(--muted); font-size:18px; max-width:640px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin:28px 0; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; }
+    .card h2 { margin:0 0 6px; font-size:18px; }
+    .card p { color:var(--muted); font-size:14px; min-height:42px; }
+    .card a { display:inline-block; background:var(--mint); color:#06231f; text-decoration:none; font-weight:700; border-radius:8px; padding:8px 12px; }
+    .note { color:var(--gold); font-size:13px; }
+    footer { color:var(--muted); padding:28px 0 48px; font-size:13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand"><img src="icon.png" alt="" /> Python 积木学习台</div>
+    <a class="ghost" href="https://github.com/bennix/PythonSratch">源码</a>
+  </header>
+  <main>
+    <section class="hero">
+      <h1>拖拽积木，写出能运行的 Python。</h1>
+      <p class="lead">给复旦 AIB110002《Python程序设计》用的桌面学习台。语法、正则、文件、Pandas 都是积木，范例可以逐步搭起来，做完能自己检查。</p>
+    </section>
+    <section class="grid">
+      <article class="card">
+        <h2>macOS</h2>
+        <p>Apple 芯片。已用 Developer ID 签名。</p>
+        <a href="https://github.com/bennix/PythonSratch/releases/latest/download/PythonScratch-0.1.0-mac-arm64.dmg">下载 dmg</a>
+      </article>
+      <article class="card">
+        <h2>Windows</h2>
+        <p>64 位安装包，内置 Python 和 Pandas。</p>
+        <a href="https://github.com/bennix/PythonSratch/releases/latest/download/PythonScratch-0.1.0-win-x64.exe">下载 exe</a>
+      </article>
+      <article class="card">
+        <h2>Linux DEB</h2>
+        <p>Debian、Ubuntu 用这个。</p>
+        <a href="https://github.com/bennix/PythonSratch/releases/latest/download/PythonScratch-0.1.0-linux-x64.deb">下载 deb</a>
+      </article>
+      <article class="card">
+        <h2>Linux RPM</h2>
+        <p>Fedora、openSUSE 用这个。</p>
+        <a href="https://github.com/bennix/PythonSratch/releases/latest/download/PythonScratch-0.1.0-linux-x64.rpm">下载 rpm</a>
+      </article>
+    </section>
+    <p class="note">Mac 版目前是 Apple 芯片安装包。Intel Mac、以及安装包文件名如果和上面不一致，请到发布页里选对应文件。</p>
+    <footer>课程练习环境。数据文件只在本机读写，不上传。</footer>
+  </main>
+</body>
+</html>

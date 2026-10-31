@@ -1,0 +1,80 @@
+{
+  "name": "python-scratch",
+  "version": "0.1.0",
+  "description": "Scratch-style Python learning lab for AIB110002",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:mac": "electron-builder --mac dmg --arm64",
+    "dist:linux": "electron-builder --linux deb rpm",
+    "dist:win": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "blockly": "10.4.3",
+    "electron": "33.4.11"
+  },
+  "devDependencies": {
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "edu.fudan.pythonscratch",
+    "productName": "PythonScratch",
+    "artifactName": "PythonScratch-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "data",
+        "to": "data"
+      },
+      {
+        "from": ".venv",
+        "to": ".venv",
+        "filter": [
+          "**/*",
+          "!**/*.pyc",
+          "!**/__pycache__/**"
+        ]
+      }
+    ],
+    "mac": {
+      "icon": "build/icon.icns",
+      "category": "public.app-category.education",
+      "target": [
+        "dmg"
+      ],
+      "identity": "Developer ID Application: ZHIPING XU (5N66S29EK2)",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "notarize": true
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "icon": "build/icons",
+      "category": "Education",
+      "target": [
+        "deb",
+        "rpm"
+      ],
+      "synopsis": "Scratch-style Python learning lab"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
