@@ -2,6 +2,7 @@
   "name": "python-scratch",
   "version": "0.1.0",
   "description": "Scratch-style Python learning lab for AIB110002",
+  "author": "ZHIPING XU <zpxu@fudan.edu.cn>",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -50,7 +51,7 @@
       "target": [
         "dmg"
       ],
-      "identity": "Developer ID Application: ZHIPING XU (5N66S29EK2)",
+      "identity": "ZHIPING XU (5N66S29EK2)",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
